@@ -6,14 +6,15 @@ type GradientTextProps = {
   className?: string;
 };
 
+// Solid accent colour with a soft glow — matches the Figma design's
+// treatment for emphasised words (e.g. "PROBLEM SOLVER.").
 export const GradientText = ({ children, className = '' }: GradientTextProps) => (
   <Box
     component="span"
     className={className}
     sx={{
-      background: 'linear-gradient(120deg, #a78bfa, #22d3ee)',
-      backgroundClip: 'text',
-      color: 'transparent',
+      color: 'primary.main',
+      textShadow: '0 0 20px rgba(74, 158, 255, 0.45)',
       display: 'inline-block',
     }}
   >

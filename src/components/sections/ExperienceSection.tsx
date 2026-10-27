@@ -11,15 +11,19 @@ import {
 } from "@mui/material";
 import { experiences } from "../../data/experiences";
 import { SectionHeader } from "../ui";
+import { smokyTexture } from "../ui/textures";
+
+const glowPositions = ["12% -20%", "88% 120%"];
 
 export const ExperienceSection = () => (
   <Box component="section" id="experience">
     <SectionHeader
-      title="Professional experience"
+      title="Professional Experience"
       subtitle="Building reliable products and thoughtful web experiences."
+      index="01 // EXPERIENCE"
     />
     <Stack spacing={2}>
-      {experiences.map((experience) => (
+      {experiences.map((experience, index) => (
         <Accordion
           key={`${experience.company}-${experience.period}`}
           disableGutters
@@ -28,18 +32,21 @@ export const ExperienceSection = () => (
             overflow: "hidden",
             border: 1,
             borderColor: "divider",
-            borderRadius: "16px !important",
+            borderRadius: "12px !important",
+            bgcolor: "rgba(10, 12, 16, 0.6)",
+            backgroundImage: smokyTexture(glowPositions[index % glowPositions.length]),
+            backdropFilter: "blur(16px)",
             transition:
               "transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease",
             "&:hover": {
               borderColor: "primary.main",
-              boxShadow: "0 16px 36px rgba(124, 92, 255, 0.18)",
+              boxShadow: "0 16px 36px rgba(74, 158, 255, 0.18)",
               transform: "translateY(-4px)",
             },
           }}
         >
           <AccordionSummary
-            expandIcon={<ExpandMoreRoundedIcon color="secondary" />}
+            expandIcon={<ExpandMoreRoundedIcon color="primary" />}
             aria-controls={`${experience.company}-details`}
             id={`${experience.company}-header`}
             sx={{
@@ -58,12 +65,12 @@ export const ExperienceSection = () => (
                 spacing={1.5}
                 sx={{ alignItems: "flex-start" }}
               >
-                <BusinessCenterRoundedIcon color="secondary" sx={{ mt: 0.5 }} />
+                <BusinessCenterRoundedIcon color="primary" sx={{ mt: 0.5 }} />
                 <Box>
-                  <Typography component="h3" variant="h5">
+                  <Typography component="h3" variant="h5" sx={{ textTransform: "none" }}>
                     {experience.role}
                   </Typography>
-                  <Typography color="secondary.main" sx={{ fontWeight: 700 }}>
+                  <Typography color="primary.main" sx={{ fontWeight: 700 }}>
                     {experience.company}
                   </Typography>
                 </Box>
