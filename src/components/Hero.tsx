@@ -97,18 +97,18 @@ export function Hero() {
           aria-hidden
         >
           <div className="orbit" style={{ '--inset': '0%', '--dur': '60s' } as React.CSSProperties}>
-            <span className="planet" style={{ '--c': '#6ee7c8' } as React.CSSProperties} />
+            <span className="planet" style={{ '--c': '#67e8f9' } as React.CSSProperties} />
           </div>
           <div className="orbit" style={{ '--inset': '13%', '--dur': '38s' } as React.CSSProperties}>
-            <span className="planet" style={{ '--c': '#e9c46a' } as React.CSSProperties} />
+            <span className="planet" style={{ '--c': '#a5d8ff' } as React.CSSProperties} />
           </div>
           <div className="orbit" style={{ '--inset': '26%', '--dur': '22s' } as React.CSSProperties}>
-            <span className="planet" style={{ '--c': '#b8a8ff' } as React.CSSProperties} />
+            <span className="planet" style={{ '--c': '#5ea2ff' } as React.CSSProperties} />
           </div>
           <div className="orbit-core" />
           <span className="orbit-label" style={{ top: '8%', left: '-4%' }}>React · TypeScript</span>
-          <span className="orbit-label" style={{ bottom: '14%', right: '-6%' }}>3+ yrs @ QBurst</span>
-          <span className="orbit-label" style={{ bottom: '2%', left: '8%' }}>Astrophotographer</span>
+          <span className="orbit-label" style={{ bottom: '14%', right: '-6%' }}>AI-driven products</span>
+          <span className="orbit-label" style={{ bottom: '2%', left: '8%' }}>UI/UX · Performance</span>
         </motion.div>
       </motion.div>
 

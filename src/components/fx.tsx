@@ -61,7 +61,7 @@ export function Starfield() {
         const x = (((s.x - pointer.x * 14 * s.depth) % w) + w) % w;
         const tw = still ? 0.8 : 0.55 + 0.45 * Math.sin(t * 0.001 * s.speed + s.phase);
         ctx.globalAlpha = tw * (0.35 + s.depth * 0.8);
-        ctx.fillStyle = s.depth > 0.6 ? '#e6e0ff' : '#ffffff';
+        ctx.fillStyle = s.depth > 0.6 ? '#e0ecff' : '#ffffff';
         ctx.beginPath();
         ctx.arc(x, y, s.r, 0, Math.PI * 2);
         ctx.fill();
@@ -73,8 +73,8 @@ export function Starfield() {
       if (meteor) {
         const m = meteor;
         const g = ctx.createLinearGradient(m.x, m.y, m.x - m.vx * 14, m.y - m.vy * 14);
-        g.addColorStop(0, `rgba(230,224,255,${m.life})`);
-        g.addColorStop(1, 'rgba(230,224,255,0)');
+        g.addColorStop(0, `rgba(224, 236, 255,${m.life})`);
+        g.addColorStop(1, 'rgba(224, 236, 255,0)');
         ctx.globalAlpha = 1;
         ctx.strokeStyle = g;
         ctx.lineWidth = 1.2;
