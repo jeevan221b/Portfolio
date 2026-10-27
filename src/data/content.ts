@@ -84,7 +84,7 @@ export const labProjects: LabProject[] = [
     title: 'Nexus',
     kicker: 'Personal infrastructure',
     blurb:
-      'A retired Galaxy M31 turned into a 24/7 home server. Termux gives it Linux; runit, nginx, Tailscale and a Cloudflare tunnel turn it into the host for my other projects.',
+      "A retired Galaxy M31 turned into a 24/7 home server. Termux gives it Linux; runit, nginx, Tailscale and a Cloudflare tunnel turn it into the host for my other projects, including the portfolio you're reading right now.",
     highlights: [
       'Self-healing boot: one idempotent ensure-up script, fired by boot, cron, a tmux keeper and Android JobScheduler',
       'Serves web apps and bots to the internet through a named Cloudflare tunnel',

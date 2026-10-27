@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react';
 import { profile } from '../data/content';
 import { Magnetic } from './fx';
@@ -56,14 +56,25 @@ const enter = (delay: number) => ({
   transition: { duration: 1, ease, delay },
 });
 
+// Below this width the orbit stacks under the text, so the hero is taller than the screen.
+const stackedQuery = '(max-width: 860px)';
+const subscribeStacked = (cb: () => void) => {
+  const mq = window.matchMedia(stackedQuery);
+  mq.addEventListener('change', cb);
+  return () => mq.removeEventListener('change', cb);
+};
+const isStacked = () => window.matchMedia(stackedQuery).matches;
+
 export function Hero() {
+  const stacked = useSyncExternalStore(subscribeStacked, isStacked);
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 700], [0, 160]);
   const fade = useTransform(scrollY, [0, 500], [1, 0]);
 
   return (
     <section className="hero" id="top">
-      <motion.div className="container hero-inner" style={{ y, opacity: fade }}>
+      {/* the scroll fade would hide the stacked orbit just as it scrolls into view */}
+      <motion.div className="container hero-inner" style={stacked ? undefined : { y, opacity: fade }}>
         <div>
           <motion.div className="eyebrow" {...enter(0.1)}>
             <span className="status-dot" style={{ marginRight: 2 }} />
@@ -107,7 +118,7 @@ export function Hero() {
           </div>
           <div className="orbit-core" />
           <span className="orbit-label" style={{ top: '8%', left: '-4%' }}>React · TypeScript</span>
-          <span className="orbit-label" style={{ bottom: '14%', right: '-6%' }}>AI-driven products</span>
+          <span className="orbit-label" style={{ bottom: '14%', right: '0%' }}>AI-driven products</span>
           <span className="orbit-label" style={{ bottom: '2%', left: '8%' }}>UI/UX · Performance</span>
         </motion.div>
       </motion.div>

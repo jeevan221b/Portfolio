@@ -176,11 +176,11 @@ section { position: relative; padding: clamp(80px, 10vw, 128px) 0; }
 /* ---------- hero ---------- */
 
 .hero {
-  min-height: 100svh; display: flex; align-items: center; padding: 120px 0 80px;
+  min-height: 100svh; display: flex; align-items: center; padding: 120px 0 80px; overflow-x: clip;
 }
 .hero-inner { display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: center; }
 .hero-name {
-  margin: 22px 0 0; font-size: clamp(3.2rem, 11vw, 8.4rem); line-height: 0.92;
+  margin: 22px 0 0; font-size: clamp(2.6rem, min(11vw, 17vh), 8.4rem); line-height: 0.92;
   font-weight: 700; letter-spacing: -0.06em;
 }
 .hero-name .line { display: block; overflow: hidden; padding-bottom: 0.06em; }
@@ -234,9 +234,16 @@ section { position: relative; padding: clamp(80px, 10vw, 128px) 0; }
 }
 @keyframes drip { to { top: 100%; } }
 
+@media (max-height: 820px) { .scroll-hint { display: none; } }
+
 @media (max-width: 860px) {
   .hero-inner { grid-template-columns: 1fr; }
-  .orbit-wrap, .scroll-hint { display: none; }
+  .scroll-hint { display: none; }
+  /* compact orbit under the buttons; desktop keeps the full-size one */
+  .orbit-wrap { justify-self: center; width: min(78vw, 320px); margin-top: 8px; }
+  .orbit-core { box-shadow: 0 0 50px 6px rgba(59, 130, 246, 0.35); }
+  .orbit .planet { width: 8px; height: 8px; margin-left: -4px; top: -4px; }
+  .orbit-label { font-size: 0.6rem; padding: 4px 8px; }
 }
 
 /* ---------- experience ---------- */
@@ -358,8 +365,8 @@ section { position: relative; padding: clamp(80px, 10vw, 128px) 0; }
 }
 .email-btn:hover { border-color: var(--accent); background: rgba(94, 162, 255, 0.06); }
 .email-btn .copy { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); }
-.contact-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 28px; margin-top: 36px; }
-.contact-links a { color: var(--muted); font-size: 0.95rem; transition: color 0.3s; }
+.contact-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 16px; margin-top: 28px; }
+.contact-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 6px; color: var(--muted); font-size: 0.95rem; transition: color 0.3s; }
 .contact-links a:hover { color: var(--text); }
 
 .footer { border-top: 1px solid var(--line); padding: 28px 0; }
