@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Visitor log + counts on Nexus (deploy/visitor-stats.py)
+visits
