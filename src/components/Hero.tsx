@@ -4,7 +4,7 @@ import { profile } from '../data/content';
 import { Magnetic } from './fx';
 import { ease } from './motion';
 
-const words = ['interfaces', 'web apps', 'self-hosted tools', 'side quests'];
+const words = ['interfaces', 'APIs', 'web apps', 'self-hosted tools'];
 
 function SplitLine({ text, delay }: { text: string; delay: number }) {
   return (
@@ -119,7 +119,7 @@ export function Hero() {
           <div className="orbit-core" />
           <span className="orbit-label" style={{ top: '8%', left: '-4%' }}>React · TypeScript</span>
           <span className="orbit-label" style={{ bottom: '14%', right: '0%' }}>AI-driven products</span>
-          <span className="orbit-label" style={{ bottom: '2%', left: '8%' }}>UI/UX · Performance</span>
+          <span className="orbit-label" style={{ bottom: '2%', left: '8%' }}>Java · Node.js</span>
         </motion.div>
       </motion.div>
 

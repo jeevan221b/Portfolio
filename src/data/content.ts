@@ -3,11 +3,11 @@
 export const profile = {
   name: 'Raj Diwakar',
   fullName: 'A Raj Diwakar',
-  role: 'Front-End Developer',
-  location: 'Perumbavoor, Kerala',
+  role: 'Full-Stack Developer',
+  location: 'Kochi, Kerala',
   email: 'ard121001@gmail.com',
   intro:
-    'I build fast, user-centric interfaces with React and TypeScript at QBurst, and after hours I run a small fleet of self-hosted tools on an old Android phone.',
+    'I build web products end to end at QBurst: React and TypeScript on the front, Java and Node.js on the back. After hours I run a small fleet of self-hosted services on an old Android phone.',
   links: [
     { label: 'GitHub', href: 'https://github.com/jeevan221b' },
     { label: 'Blog', href: 'https://blog.jeevanraj.dev' },
@@ -29,13 +29,13 @@ export const experience: Job[] = [
     company: 'QBurst Technologies',
     period: 'Aug 2023 — Present',
     points: [
-      'Build intuitive, responsive front ends in React with JavaScript and TypeScript, and support backend integration so features ship end to end.',
+      'Build features end to end: responsive React and TypeScript front ends, the REST API integrations behind them, and Java / Node.js service work so features ship complete.',
       'Spearheaded the migration of a large-scale React codebase from JavaScript to TypeScript, finishing a 3-month plan in 1 month without destabilising the product.',
       'Led several projects from scratch, working across cross-functional teams from requirements through to production deployment.',
       'Ran technical sessions on emerging technologies for 50+ colleagues.',
       'Won 1st place in an internal hackathon among 20+ teams with a working prototype built in 24 hours.',
     ],
-    stack: ['React', 'TypeScript', 'JavaScript', 'Redux', 'Material UI', 'Java'],
+    stack: ['React', 'TypeScript', 'Java', 'Node.js', 'REST APIs', 'Redux', 'Material UI', 'SQL'],
   },
 ];
 
@@ -51,20 +51,20 @@ export const workProjects: WorkProject[] = [
   {
     title: 'AI-driven Recruitment Platform',
     blurb:
-      'Front end for resume parsing, candidate-to-job matching and semantic search, shaped into a hiring workflow recruiters can move through quickly.',
-    tags: ['React', 'Semantic search', 'UX'],
+      'Resume parsing, candidate-to-job matching and semantic search, wired through APIs into a hiring workflow recruiters can move through quickly.',
+    tags: ['React', 'REST APIs', 'Semantic search'],
   },
   {
     title: 'CV Parsing & Standardisation',
     blurb:
-      'Turns CVs in any format into structured profiles, then into client-configurable templates. I built the transformation UI that cut manual processing.',
-    tags: ['React', 'TypeScript', 'AI extraction'],
+      'Turns CVs in any format into structured profiles, then into client-configurable templates. I built the transformation flow, UI to API, that cut manual processing.',
+    tags: ['React', 'TypeScript', 'Node.js', 'AI extraction'],
   },
   {
     title: 'Back-Office Process Automation',
     blurb:
       'AI-assisted automation for timesheets, payroll, billing and cash allocation, built to scale while removing manual steps from finance workflows.',
-    tags: ['Automation', 'Workflows', 'AI'],
+    tags: ['Java', 'Automation', 'Workflows', 'AI'],
   },
 ];
 
@@ -87,7 +87,7 @@ export const labProjects: LabProject[] = [
       "A retired Galaxy M31 turned into a 24/7 home server. Termux gives it Linux; runit, nginx, Tailscale and a Cloudflare tunnel turn it into the host for my other projects, including the portfolio you're reading right now.",
     highlights: [
       'Self-healing boot: one idempotent ensure-up script, fired by boot, cron, a tmux keeper and Android JobScheduler',
-      'Serves web apps and bots to the internet through a named Cloudflare tunnel',
+      'Supervised backend services behind an nginx reverse proxy, published through a named Cloudflare tunnel',
       'Battery and uptime alerts straight to Telegram',
     ],
     stack: ['Termux', 'nginx', 'runit', 'Cloudflare', 'Tailscale'],
@@ -112,11 +112,12 @@ export const labProjects: LabProject[] = [
     blurb:
       'Pick a topic, hear each question read aloud, answer by speaking. At the end you get scores per dimension, missed points, model answers and delivery stats like pace and filler words.',
     highlights: [
+      'Node.js + Hono API with SQLite persistence, Google OAuth sessions and an LLM scoring pipeline',
       'Live transcription in the browser, Whisper fallback elsewhere',
       'Works for any field, with custom topics and focus areas',
       'Invite-only with Google sign-in, hosted on Nexus',
     ],
-    stack: ['React', 'Hono', 'Groq', 'Whisper', 'SQLite'],
+    stack: ['React', 'Node.js', 'Hono', 'SQLite', 'Groq', 'Whisper'],
     visual: 'voice',
   },
   {
@@ -135,8 +136,9 @@ export const labProjects: LabProject[] = [
 ];
 
 export const skills = [
-  'React', 'TypeScript', 'JavaScript', 'Redux', 'Material UI', 'Java', 'Apps Script', 'Python',
-  'FastAPI', 'Node', 'SQLite', 'nginx', 'Git', 'Claude Code', 'Cursor', 'MQTT', 'ESP32',
+  'React', 'TypeScript', 'JavaScript', 'Redux', 'Material UI', 'Java', 'Spring Boot', 'Node.js', 'Express', 'Hono',
+  'REST APIs', 'PostgreSQL', 'MySQL', 'MongoDB', 'SQLite', 'Python', 'FastAPI', 'Docker', 'nginx', 'Git',
+  'Apps Script', 'Claude Code', 'Cursor', 'MQTT', 'ESP32',
 ];
 
 export const beyond = [

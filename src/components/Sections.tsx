@@ -76,7 +76,7 @@ export function Work() {
       <div className="container">
         <Heading
           eyebrow="02 — Client work"
-          lede="Products I've built front ends for at QBurst. Client names stay private, the problems don't."
+          lede="Products I've built at QBurst, from the UI to the services behind it. Client names stay private, the problems don't."
         >
           AI products, <em>made usable.</em>
         </Heading>
@@ -202,7 +202,7 @@ export function Contact() {
           Let's build<br /><span className="serif grad-text">something.</span>
         </Reveal>
         <Reveal as="p" className="section-lede" delay={0.1}>
-          Open to front-end roles, interesting problems and conversations about the night sky.
+          Open to full-stack roles, interesting problems and conversations about the night sky.
         </Reveal>
         <Reveal delay={0.15}>
           <Magnetic strength={0.2}>
