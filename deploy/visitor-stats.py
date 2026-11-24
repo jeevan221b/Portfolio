@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Turn the portfolio's beacon log into visitor counts for Mission Control.
+"""Turn the portfolio's beacon log into visitor counts for Mission Control and TARS.
 
 nginx appends one JSON line per page load to visits/visits.log (see
 deploy/nginx-portfolio-site.conf and src/visit.ts). Cron runs this every
@@ -9,6 +9,11 @@ rewrites visits/status.json, which nginx serves on 127.0.0.1:8082 only.
 A visitor is a hash of IP + user agent with a salt that is replaced every
 day, so the same person counts once per day and can't be followed across
 days. Raw addresses never leave the log, and the log is truncated once read.
+
+Besides counts, each day keeps an anonymous list of visitors ("people"): first and
+last seen, pageviews, country, where they came from, browser/OS, and when they
+clicked the Blog link (beacon with e=blog). No IP, no hash: a finished day's list
+is kept for HISTORY_DAYS and read by TARS (tars-gate stats portfolio).
 
 Stdlib only (Termux). Days are IST, the site owner's day.
 """
@@ -53,7 +58,26 @@ def load_state() -> dict:
 
 def new_day(date: str) -> dict:
     return {"date": date, "salt": secrets.token_hex(16), "visitors": {}, "pageviews": 0,
-            "bots": 0, "referrers": {}, "countries": {}}
+            "bots": 0, "referrers": {}, "countries": {}, "people": {}, "blog_clicks": 0}
+
+
+def device(ua: str) -> str:
+    """Coarse "Browser on OS" from a user agent; nothing more specific is kept."""
+    os_ = next((name for pat, name in (
+        (r"iPhone", "iPhone"), (r"iPad", "iPad"), (r"Android", "Android"), (r"Windows", "Windows"),
+        (r"Mac OS X|Macintosh", "macOS"), (r"CrOS", "ChromeOS"), (r"Linux", "Linux"),
+    ) if re.search(pat, ua)), "unknown OS")
+    browser = next((name for pat, name in (
+        (r"Edg/", "Edge"), (r"OPR/|Opera", "Opera"), (r"SamsungBrowser", "Samsung Internet"),
+        (r"FBAN|FBAV|FB_IAB", "Facebook app"), (r"Instagram", "Instagram app"), (r"LinkedInApp", "LinkedIn app"),
+        (r"Firefox/|FxiOS", "Firefox"), (r"Chrome/|CriOS", "Chrome"), (r"Safari/", "Safari"),
+    ) if re.search(pat, ua)), "unknown browser")
+    return f"{browser} on {os_}"
+
+
+def people_list(day: dict) -> list[dict]:
+    """The day's visitors without their hashes, in order of arrival."""
+    return sorted(day.get("people", {}).values(), key=lambda p: p["first"])
 
 
 def visitor_id(salt: str, ip: str, ua: str) -> str:
@@ -67,7 +91,13 @@ def roll_day(state: dict, date: str) -> dict:
     if day and day["date"] == date:
         return day
     if day:
-        state["history"][day["date"]] = {"visitors": len(day["visitors"]), "pageviews": day["pageviews"]}
+        people = people_list(day)
+        state["history"][day["date"]] = {
+            "visitors": len(day["visitors"]), "pageviews": day["pageviews"],
+            "blog_clicks": day.get("blog_clicks", 0),
+            "blog_visitors": sum(1 for p in people if p["blog"]),
+            "people": people,
+        }
     state["day"] = new_day(date)
     return state["day"]
 
@@ -80,9 +110,13 @@ def count(state: dict, entry: dict) -> None:
     date = ts.date().isoformat()
     day = state.get("day")
     # A late line from an already-archived day: count it there, coarsely.
+    event = entry.get("e") or ""
+    if event and event != "blog":
+        return  # unknown event: ignore rather than count it as a page load
     if day and date < day["date"]:
         old = state["history"].setdefault(date, {"visitors": 0, "pageviews": 0})
-        old["pageviews"] += 1
+        key = "blog_clicks" if event else "pageviews"
+        old[key] = old.get(key, 0) + 1
         return
     day = roll_day(state, date)
 
@@ -93,9 +127,23 @@ def count(state: dict, entry: dict) -> None:
 
     ip = entry.get("ip") or entry.get("ra", "")
     vid = visitor_id(day["salt"], ip, ua)
+    at = ts.isoformat(timespec="seconds")
+    people = day.setdefault("people", {})
+    person = people.get(vid)
+    if person is None:
+        person = people[vid] = {"first": at, "last": at, "views": 0, "country": entry.get("c") or "??",
+                                "from": entry.get("r") or "direct", "device": device(ua), "blog": []}
+    person["last"] = max(person["last"], at)
+
+    if event == "blog":
+        day["blog_clicks"] = day.get("blog_clicks", 0) + 1
+        person["blog"].append(at)
+        return
+
     first = vid not in day["visitors"]
-    day["visitors"][vid] = ts.isoformat(timespec="seconds")
+    day["visitors"][vid] = at
     day["pageviews"] += 1
+    person["views"] += 1
     if first:
         # referrer/country per visitor, not per reload
         ref = entry.get("r") or "direct"
@@ -143,14 +191,17 @@ def build_status(state: dict, at: datetime) -> dict:
     for old in sorted(history)[:-HISTORY_DAYS]:
         del history[old]
 
+    blog_visitors_today = sum(1 for p in day.get("people", {}).values() if p["blog"])
     daily = []
     for i in range(13, -1, -1):
         date = (at.date() - timedelta(days=i)).isoformat()
         if date == today:
-            daily.append({"date": date, "visitors": len(day["visitors"]), "pageviews": day["pageviews"]})
+            daily.append({"date": date, "visitors": len(day["visitors"]), "pageviews": day["pageviews"],
+                          "blog_visitors": blog_visitors_today})
         else:
             h = history.get(date, {})
-            daily.append({"date": date, "visitors": h.get("visitors", 0), "pageviews": h.get("pageviews", 0)})
+            daily.append({"date": date, "visitors": h.get("visitors", 0), "pageviews": h.get("pageviews", 0),
+                          "blog_visitors": h.get("blog_visitors", 0)})
 
     cutoff = at - timedelta(minutes=ACTIVE_MINUTES)
     seen = [datetime.fromisoformat(t) for t in day["visitors"].values()]
@@ -163,6 +214,8 @@ def build_status(state: dict, at: datetime) -> dict:
         "visitors_today": len(day["visitors"]),
         "pageviews_today": day["pageviews"],
         "bots_today": day["bots"],
+        "blog_clicks_today": day.get("blog_clicks", 0),
+        "blog_visitors_today": blog_visitors_today,
         f"active_{ACTIVE_MINUTES}m": sum(t >= cutoff for t in seen),
         "visitors_yesterday": daily[-2]["visitors"],
         "visitors_7d": sum(d["visitors"] for d in daily[-7:]),

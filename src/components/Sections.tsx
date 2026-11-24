@@ -10,6 +10,7 @@ import {
   workProjects,
 } from '../data/content';
 import { Magnetic, Reveal, SpotCard } from './fx';
+import { recordClick } from '../visit';
 import { stagger } from './motion';
 import { FeatureVisual } from './Visuals';
 
@@ -214,7 +215,17 @@ export function Contact() {
         </Reveal>
         <Reveal className="contact-links" delay={0.2}>
           {profile.links.map((l) => (
-            <a key={l.label} href={l.href} target="_blank" rel="noreferrer">{l.label} ↗</a>
+            <a
+              key={l.label}
+              href={l.href}
+              target="_blank"
+              rel="noreferrer"
+              // left click, and middle click (open in new tab)
+              onClick={l.label === 'Blog' ? () => recordClick('blog') : undefined}
+              onAuxClick={l.label === 'Blog' ? (e) => e.button === 1 && recordClick('blog') : undefined}
+            >
+              {l.label} ↗
+            </a>
           ))}
         </Reveal>
       </div>
