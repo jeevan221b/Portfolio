@@ -25,3 +25,4 @@ dist-ssr
 
 # Visitor log + counts on Nexus (deploy/visitor-stats.py)
 visits
+__pycache__/
